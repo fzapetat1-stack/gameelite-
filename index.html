@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GameStore Elite | Tienda Premium de Juegos</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+    --bg-dark:#0a0f17;
+    --card:#131a25;
+    --card-hover:#1a2435;
+    --accent:#6366f1;
+    --accent-light:#8b5cf6;
+    --accent-glow:rgba(99, 102, 241, 0.3);
+    --text:#f8fafc;
+    --text-secondary:#cbd5e1;
+    --btn:#4f46e5;
+    --btn-hover:#4338ca;
+    --success:#10b981;
+    --danger:#ef4444;
+    --gold:#fbbf24;
+    --discount:#ef4444;
+    --premium-gradient:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-gradient:linear-gradient(145deg, #1e293b, #0f172a);
+    --glass:rgba(255,255,255,0.05);
+    --glass-border:rgba(255,255,255,0.1);
+}
+
+/* Reset / base */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    background:var(--bg-dark);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    background-image: 
+        radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+    min-height: 100vh;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:24px;}
+
+/* Header premium */
+header{
+    background: var(--premium-gradient);
+    padding: 24px;
+    border-radius: 20px;
+    text-align:center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 80px var(--accent-glow);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid var(--glass-border);
+}
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+}
+header h1{
+    margin:0;
+    font-size:2.2rem;
+    font-weight:800;
+    letter-spacing:-0.5px;
+    background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+header p{
+    margin:8px 0 0 0;
+    color:var(--text-secondary);
+    font-size:1.1rem;
+    font-weight:500;
+}
+
+/* Filtros y búsqueda mejorados */
+.games-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0 20px 0;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 20px 14px 48px;
+    background: var(--card-gradient);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.search-box i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 10px 18px;
+    background: var(--card-gradient);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.filter-tab:hover, .filter-tab.active {
+    background: var(--premium-gradient);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Grid de juegos premium mejorado */
+.games-section {
+    margin: 40px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.section-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#gameGrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.game-item{
+    background: var(--card-gradient);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.game-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.game-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--premium-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+.game-item:hover{
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px var(--accent-glow);
+    border-color: var(--accent);
+}
+.game-item:hover::after {
+    transform: scaleX(1);
+}
+
+.game-image-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+.game-item img{
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    transition: all 0.4s ease;
+    filter: brightness(0.9);
+}
+.game-item:hover img{
+    filter: brightness(1);
+    transform: scale(1.08);
+}
+
+.game-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--premium-gradient);
+    color: white;
+    font-size: 0.7rem;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.game-badge.popular {
+    background: linear-gradient(135deg, #ef4444, #f97316);
+}
+
+.game-badge.trending {
+    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+}
+
+.game-badge.premium {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.game-badge.new {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.game-badge.best-seller {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.game-badge.ofertas {
+    background: linear-gradient(135deg, var(--gold), #f59e0b);
+    color: #1e293b;
+}
+
+.game-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.game-item h3{
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+.game-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    flex: 1;
+}
+
+.game-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.price-tag {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-light);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.discount-badge {
+    background: var(--discount);
+    color: white;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+/* Sección precios premium */
+#priceSection{
+    margin-top:24px;
+    display:none;
+}
+.price-panel{
+    background: var(--card-gradient);
+    padding:24px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.4);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+.price-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px;
+    border-radius:14px;
+    margin-bottom:12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+.price-row:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateX(5px);
+}
+.price-row .label{
+    flex:1;
+    font-weight:600;
+    font-size:1.05rem;
+}
+.price-row .price{
+    font-weight:800;
+    color:var(--accent-light);
+    min-width:90px;
+    text-align:right;
+    font-size:1.1rem;
+}
+
+.price-row .original-price {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.btn{
+    background:var(--btn);
+    border:none;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+.btn:hover{
+    background:var(--btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+}
+.btn:hover::after {
+    left: 100%;
+}
+
+.btn-ghost{
+    background:transparent;
+    border:1px solid var(--glass-border);
+    color:var(--text);
+    transition: all 0.3s ease;
+}
+.btn-ghost:hover{
+    background:rgba(255,255,255,0.05);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.btn-danger{
+    background:var(--danger);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+.btn-danger:hover{
+    background:#dc2626;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+}
+
+.btn-success{
+    background:var(--success);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+.btn-success:hover{
+    background:#0d9c6d;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.btn-premium {
+    background: var(--premium-gradient);
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+}
+.btn-premium:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Carrito premium */
+#cartToggle{
+    position:fixed;
+    top:24px;
+    right:24px;
+    z-index:1200;
+    background: var(--premium-gradient);
+    color:#fff;
+    border:none;
+    padding:14px 20px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:800;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4), 0 0 20px rgba(139, 92, 246, 0.5);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+#cartToggle:hover{
+    transform:scale(1.05) translateY(-2px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.5), 0 0 30px rgba(139, 92, 246, 0.6);
+}
+#cartToggle .cart-count {
+    background: var(--gold);
+    color: #1e293b;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 900;
+}
+
+#cart{
+    position:fixed;
+    right:24px;
+    top:80px;
+    width:420px;
+    max-height:80vh;
+    background: var(--card-gradient);
+    padding:24px;
+    border-radius:20px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.5), 0 0 40px rgba(99, 102, 241, 0.3);
+    display:none;
+    z-index:1200;
+    overflow-y:auto;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+#cart h3{
+    margin:0 0 16px 0;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:1.4rem;
+    font-weight:800;
+}
+#cart h3 span{
+    background:var(--accent);
+    color:var(--bg-dark);
+    border-radius:50%;
+    width:28px;
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.9rem;
+    font-weight:900;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:10px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+.cart-item:hover{
+    background:rgba(255,255,255,0.08);
+    transform: translateX(5px);
+}
+.cart-item-info{
+    flex:1;
+}
+.cart-item-name{
+    font-weight:600;
+    margin-bottom:4px;
+    font-size:1.05rem;
+}
+.cart-item-price{
+    font-size:0.95rem;
+    color:var(--accent-light);
+    font-weight:700;
+}
+.cart-item-remove{
+    background:var(--danger);
+    color:white;
+    border:none;
+    border-radius:8px;
+    width:28px;
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-weight:bold;
+    margin-left:10px;
+    transition: all 0.2s ease;
+}
+.cart-item-remove:hover{
+    background:#dc2626;
+    transform: scale(1.1);
+}
+
+.cart-total{
+    font-weight:900;
+    text-align:right;
+    margin-top:16px;
+    font-size:1.3rem;
+    color:var(--accent-light);
+    border-top:1px solid var(--glass-border);
+    padding-top:16px;
+}
+
+.cart-actions{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
+.cart-actions .btn{
+    flex:1;
+}
+
+.cart-empty{
+    text-align:center;
+    padding:30px 20px;
+    color:var(--text-secondary);
+}
+.cart-empty i {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.small{
+    font-size:0.9rem;
+    color:var(--text-secondary)
+}
+
+/* Anuncio de WhatsApp premium */
+.whatsapp-ad {
+    background: var(--card-gradient);
+    padding: 20px 24px;
+    border-radius: 18px;
+    margin: 30px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+.whatsapp-ad::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--success);
+}
+.whatsapp-ad-content {
+    flex: 1;
+}
+.whatsapp-ad h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.whatsapp-ad p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.whatsapp-btn {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+}
+.whatsapp-btn:hover {
+    background: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+/* Botón flotante de WhatsApp premium */
+.whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 1000;
+    background: #25d366;
+    color: white;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 20px rgba(37, 211, 102, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    background: #128c7e;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 30px rgba(37, 211, 102, 0.6);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* Instrucciones de pago premium */
+.payment-instructions {
+    margin-top:20px;
+    padding:20px;
+    background: var(--glass);
+    border-radius:14px;
+    border: 1px solid var(--glass-border);
+}
+.payment-instructions h4 {
+    margin:0 0 12px 0;
+    color:var(--accent-light);
+    font-size:1.2rem;
+    font-weight:700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.payment-instructions h4 i {
+    font-size: 1.3rem;
+}
+
+/* Secciones adicionales (ocultas inicialmente) */
+.additional-sections {
+    display: block;
+}
+
+/* MEJORAS PROFESIONALES PARA SECCIONES INFORMATIVAS */
+.about-section {
+    margin: 60px 0;
+}
+
+.about-hero {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px;
+    background: var(--card-gradient);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--premium-gradient);
+}
+
+.about-hero h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+}
+
+.about-hero p {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.about-card {
+    background: var(--card-gradient);
+    padding: 36px 32px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.about-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: var(--premium-gradient);
+    transition: transform 0.4s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow);
+}
+
+.about-card:hover::before {
+    transform: scaleY(1.1);
+}
+
+.about-card h3 {
+    color: var(--accent-light);
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.3;
+}
+
+.about-card h3 i {
+    font-size: 2rem;
+    background: var(--premium-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.about-card p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-size: 1.05rem;
+    flex: 1;
+}
+
+.about-card ul {
+    color: var(--text-secondary);
+    padding-left: 0;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.about-card li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    padding-left: 28px;
+    position: relative;
+    font-size: 1.05rem;
+}
+
+.about-card li::before {
+    content: '✓';
+    color: var(--success);
+    font-size: 1.2rem;
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.about-card strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Estadísticas profesionales */
+.stats-section {
+    margin: 80px 0;
+    padding: 60px 0;
+    background: var(--card-gradient);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--premium-gradient);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-item {
+    padding: 30px 20px;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Sección de equipo */
+.team-section {
+    margin: 80px 0;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.team-card {
+    background: var(--card-gradient);
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    text-align: center;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.team-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--premium-gradient);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+.team-card:hover::before {
+    transform: scaleX(1);
+}
+
+.team-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--premium-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    color: white;
+}
+
+.team-card h3 {
+    color: var(--text);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.team-role {
+    color: var(--accent-light);
+    font-weight: 700;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+}
+
+.team-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Sección de Términos y Políticas mejorada */
+.terms-section {
+    margin: 80px 0;
+}
+
+.terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.terms-card {
+    background: var(--card-gradient);
+    padding: 36px 32px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.terms-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: var(--premium-gradient);
+}
+
+.terms-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+.terms-card h3 {
+    color: var(--accent-light);
+    margin-bottom: 24px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 16px;
+}
+
+.terms-card h3 i {
+    font-size: 2rem;
+    background: var(--premium-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.terms-list {
+    list-style: none;
+    padding: 0;
+}
+
+.terms-list li {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    padding-left: 32px;
+    position: relative;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.terms-list li::before {
+    content: '•';
+    color: var(--accent);
+    font-size: 2rem;
+    position: absolute;
+    left: 8px;
+    top: -8px;
+}
+
+.terms-list strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width:768px){
+    .game-item img{height:140px}
+    #cart{width:90vw;right:5vw;left:5vw}
+    .whatsapp-ad {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    .whatsapp-float {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+        bottom: 20px;
+        left: 20px;
+    }
+    .cart-actions {
+        flex-direction: column;
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    .about-grid, .terms-grid, .team-grid, .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-header h2 {
+        font-size: 1.8rem;
+    }
+    .games-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        max-width: 100%;
+    }
+    .filter-tabs {
+        justify-content: center;
+    }
+    #gameGrid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .about-hero h2 {
+        font-size: 2.2rem;
+    }
+    .about-hero p {
+        font-size: 1.1rem;
+    }
+    .stat-number {
+        font-size: 2.5rem;
+    }
+}
+
+/* Notificaciones premium */
+.notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--success);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 2000;
+    font-weight: 600;
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 4px solid rgba(255,255,255,0.3);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Efectos de brillo y partículas */
+.glow {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-20px) translateX(10px); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Efectos de partículas -->
+<div class="glow" style="top: 10%; left: 5%;"></div>
+<div class="glow" style="top: 70%; right: 10%; animation-delay: 2s;"></div>
+<div class="glow" style="top: 40%; left: 80%; animation-delay: 4s;"></div>
+
+<div class="wrap">
+
+<header>
+<h1>GameStore Elite</h1>
+<p>Tu destino premium para monedas de juego y gift cards</p>
+</header>
+
+<!-- Anuncio de WhatsApp -->
+<div class="whatsapp-ad">
+    <div class="whatsapp-ad-content">
+        <h3><i class="fas fa-crown"></i> Soporte Premium</h3>
+        <p>Asistencia personalizada y rápida para todas tus compras</p>
+    </div>
+    <a href="https://wa.me/50240512960" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i> Contactar
+    </a>
+</div>
+
+<!-- Sección de Juegos Mejorada -->
+<div class="games-section">
+    <div class="section-header">
+        <h2>Nuestros Juegos Destacados</h2>
+        <p>Descubre la mejor selección de monedas y contenido para tus juegos favoritos</p>
+    </div>
+
+    <!-- Controles de búsqueda y filtros -->
+    <div class="games-controls">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="gameSearch" placeholder="Buscar juegos...">
+        </div>
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all">Todos</div>
+            <div class="filter-tab" data-filter="popular">Populares</div>
+            <div class="filter-tab" data-filter="trending">Trending</div>
+            <div class="filter-tab" data-filter="premium">Premium</div>
+            <div class="filter-tab" data-filter="discount">Ofertas</div>
+        </div>
+    </div>
+
+    <!-- GRID: 10 juegos mejorados -->
+    <div id="gameGrid" aria-label="Galería de juegos">
+
+        <div class="game-item" data-key="fortnite" data-category="popular discount" onclick="openPrices('fortnite')">
+            <div class="game-image-container">
+                <img src="https://cdn2.unrealengine.com/12br-delay-social-news-header-02-1920x1080-119208936.jpg" alt="Fortnite">
+                <div class="game-badge popular">POPULAR</div>
+            </div>
+            <div class="game-content">
+                <h3>Fortnite</h3>
+                <p class="game-description">V-Bucks y paquetes exclusivos para el battle royale más popular del mundo</p>
+                <div class="game-price">
+                    <span class="original-price">Q89.00</span>
+                    <span class="price-tag">Q73.00 <span class="discount-badge">-18%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="freefire" data-category="trending discount" onclick="openPrices('freefire')">
+            <div class="game-image-container">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnuDq6I0RunolD7ZruyfqgTkjnh2_oAo0w1A&s" alt="Free Fire">
+                <div class="game-badge trending">TRENDING</div>
+            </div>
+            <div class="game-content">
+                <h3>Free Fire</h3>
+                <p class="game-description">Diamantes para personalizar tu experiencia en el battle royale móvil</p>
+                <div class="game-price">
+                    <span class="original-price">Q14.00</span>
+                    <span class="price-tag">Q11.00 <span class="discount-badge">-21%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="codm" data-category="popular discount" onclick="openPrices('codm')">
+            <div class="game-image-container">
+                <img src="https://i.pinimg.com/736x/62/73/86/6273861b81193778439d68dae7a26e71.jpg" alt="Call of Duty Mobile">
+                <div class="game-badge popular">POPULAR</div>
+            </div>
+            <div class="game-content">
+                <h3>Call of Duty Mobile</h3>
+                <p class="game-description">CP para desbloquear armas, personajes y contenido exclusivo</p>
+                <div class="game-price">
+                    <span class="original-price">Q12.00</span>
+                    <span class="price-tag">Q9.00 <span class="discount-badge">-25%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="pubg" data-category="popular discount" onclick="openPrices('pubg')">
+            <div class="game-image-container">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcDbA7_DlNjyKjw-q0Z-sXgbbMmm_kcZ_lTBfmkjUA4baKqxo8eHvDAg5OeuLXcoXCVUY" alt="PUBG Mobile">
+                <div class="game-badge best-seller">BEST SELLER</div>
+            </div>
+            <div class="game-content">
+                <h3>PUBG Mobile</h3>
+                <p class="game-description">UC para skins, pases de batalla y mejoras premium</p>
+                <div class="game-price">
+                    <span class="original-price">Q13.00</span>
+                    <span class="price-tag">Q10.00 <span class="discount-badge">-23%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="roblox" data-category="trending discount" onclick="openPrices('roblox')">
+            <div class="game-image-container">
+                <img src="https://images.rbxcdn.com/28ab48fcd5d5b19b03c126d2b6aef4b8.jpg" alt="Roblox">
+                <div class="game-badge trending">TRENDING</div>
+            </div>
+            <div class="game-content">
+                <h3>Roblox</h3>
+                <p class="game-description">Robux para accesorios, avatares y experiencias premium</p>
+                <div class="game-price">
+                    <span class="original-price">Q45.00</span>
+                    <span class="price-tag">Q35.00 <span class="discount-badge">-22%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="mobilelegends" data-category="popular discount" onclick="openPrices('mobilelegends')">
+            <div class="game-image-container">
+                <img src="https://cdn.prod.website-files.com/65956e2711516206d2d1258f/67d16acac5515372f3f3af70_MLBB%20rank%20cover.webp" alt="Mobile Legends">
+                <div class="game-badge popular">POPULAR</div>
+            </div>
+            <div class="game-content">
+                <h3>Mobile Legends</h3>
+                <p class="game-description">Diamonds para héroes, skins y ventajas en el MOBA móvil</p>
+                <div class="game-price">
+                    <span class="original-price">Q23.00</span>
+                    <span class="price-tag">Q18.00 <span class="discount-badge">-22%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="genshin" data-category="premium discount" onclick="openPrices('genshin')">
+            <div class="game-image-container">
+                <img src="https://gaming-cdn.com/images/products/9471/orig/genshin-impact-pc-epic-games-cover.jpg?v=1754495553" alt="Genshin Impact">
+                <div class="game-badge premium">PREMIUM</div>
+            </div>
+            <div class="game-content">
+                <h3>Genshin Impact</h3>
+                <p class="game-description">Crystals para wishes, personajes y armas legendarias</p>
+                <div class="game-price">
+                    <span class="original-price">Q19.00</span>
+                    <span class="price-tag">Q15.00 <span class="discount-badge">-21%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="brawl" data-category="trending discount" onclick="openPrices('brawl')">
+            <div class="game-image-container">
+                <img src="https://wallpapers.com/images/featured/brawl-stars-gkfzjpvuf1h0ypyi.jpg" alt="Brawl Stars">
+                <div class="game-badge trending">TRENDING</div>
+            </div>
+            <div class="game-content">
+                <h3>Brawl Stars</h3>
+                <p class="game-description">Gems para brawlers, skins y potenciadores exclusivos</p>
+                <div class="game-price">
+                    <span class="original-price">Q32.00</span>
+                    <span class="price-tag">Q25.00 <span class="discount-badge">-22%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="stumble" data-category="new discount" onclick="openPrices('stumble')">
+            <div class="game-image-container">
+                <img src="https://wallpapers.com/images/hd/stumble-guys-gameplay-action-68j4bixik1ns6nuj.jpg" alt="Stumble Guys">
+                <div class="game-badge new">NUEVO</div>
+            </div>
+            <div class="game-content">
+                <h3>Stumble Guys</h3>
+                <p class="game-description">Gems para personalizaciones y ventajas en el party game</p>
+                <div class="game-price">
+                    <span class="original-price">Q26.00</span>
+                    <span class="price-tag">Q20.00 <span class="discount-badge">-23%</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-item" data-key="fifa" data-category="premium" onclick="openPrices('fifa')">
+            <div class="game-image-container">
+                <img src="https://img.freepik.com/psd-gratis/logo-3d-render-super-oferta-composiciones-promocion_314999-1715.jpg?semt=ais_hybrid&w=740&q=80" alt="Ofertas Especiales">
+                <div class="game-badge ofertas">OFERTAS</div>
+            </div>
+            <div class="game-content">
+                <h3>OFERTAS ESPECIALES</h3>
+                <p class="game-description">Descuentos exclusivos y paquetes promocionales limitados</p>
+                <div class="game-price">
+                    <span class="price-tag">Consultar</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Panel de precios -->
+<div id="priceSection" class="price-panel">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div>
+        <button class="btn-ghost btn" onclick="closePrices()"><i class="fas fa-arrow-left"></i> Volver a Juegos</button>
+    </div>
+    <div style="text-align:right">
+        <div id="selectedGameTitle" style="font-weight:900;font-size:1.2rem"></div>
+        <div class="small">Selecciona el paquete deseado</div>
+    </div>
+</div>
+
+<div id="priceList" style="margin-top:12px"></div>
+
+</div>
+
+<!-- Secciones adicionales (ocultas inicialmente) -->
+<div id="additionalSections" class="additional-sections">
+
+<!-- Sección Sobre Nosotros Mejorada -->
+<div class="about-section">
+    <div class="about-hero">
+        <h2>GameStore Elite</h2>
+        <p>Líderes en distribución de contenido digital para gamers en Latinoamérica</p>
+    </div>
+    
+    <div class="about-grid">
+        <div class="about-card">
+            <h3><i class="fas fa-bullseye"></i> Nuestra Misión</h3>
+            <p>Revolucionar la experiencia de compra digital para gamers, proporcionando acceso inmediato, seguro y confiable a monedas virtuales, gift cards y contenido premium, con un servicio excepcional que supera las expectativas.</p>
+            <ul>
+                <li><strong>Acceso inmediato:</strong> Entrega instantánea las 24/7</li>
+                <li><strong>Seguridad garantizada:</strong> Transacciones 100% protegidas</li>
+                <li><strong>Confianza total:</strong> Productos legítimos y verificados</li>
+                <li><strong>Soporte premium:</strong> Asistencia personalizada permanente</li>
+            </ul>
+        </div>
+        
+        <div class="about-card">
+            <h3><i class="fas fa-eye"></i> Nuestra Visión</h3>
+            <p>Consolidarnos como el ecosistema digital preferido por los gamers latinoamericanos, siendo reconocidos por nuestra innovación constante, confiabilidad inquebrantable y compromiso absoluto con la satisfacción del cliente.</p>
+            <ul>
+                <li><strong>Expansión regional:</strong> Liderazgo en toda Latinoamérica</li>
+                <li><strong>Innovación continua:</strong> Siempre a la vanguardia tecnológica</li>
+                <li><strong>Confianza inquebrantable:</strong> Referente en seguridad digital</li>
+                <li><strong>Crecimiento sostenible:</strong> Expansión responsable y ética</li>
+            </ul>
+        </div>
+        
+        <div class="about-card">
+            <h3><i class="fas fa-star"></i> Nuestros Valores</h3>
+            <p>La esencia de GameStore Elite se fundamenta en principios que guían cada decisión y acción, asegurando una experiencia premium para cada cliente.</p>
+            <ul>
+                <li><strong>Transparencia:</strong> Comunicación clara y honesta en todas las transacciones</li>
+                <li><strong>Excelencia:</strong> Calidad superior en productos y servicios</li>
+                <li><strong>Innovación:</strong> Adaptación constante a las tendencias del gaming</li>
+                <li><strong>Compromiso:</strong> Dedicación total a la satisfacción del cliente</li>
+                <li><strong>Integridad:</strong> Prácticas comerciales éticas y responsables</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Sección de Estadísticas -->
+    <div class="stats-section">
+        <div class="section-header">
+            <h2>Nuestro Impacto en Números</h2>
+            <p>Resultados que respaldan nuestra trayectoria y compromiso</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Clientes Satisfechos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Transacciones Exitosas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.8%</div>
+                <div class="stat-label">Tasa de Satisfacción</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Soporte Disponible</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sección de Equipo -->
+    <div class="team-section">
+        <div class="section-header">
+            <h2>Nuestro Compromiso</h2>
+            <p>El equipo detrás de la experiencia GameStore Elite</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Seguridad</h3>
+                <div class="team-role">Protección Garantizada</div>
+                <p class="team-description">Implementamos los más altos estándares de seguridad para proteger cada transacción y garantizar la confidencialidad de tus datos.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Velocidad</h3>
+                <div class="team-role">Entrega Inmediata</div>
+                <p class="team-description">Sistemas automatizados que garantizan la entrega instantánea de tus productos, para que disfrutes de inmediato.</p>
+            </div>
+            <div class="team-card">
+                <div class="team-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Soporte</h3>
+                <div class="team-role">Asistencia Personalizada</div>
+                <p class="team-description">Equipo especializado disponible 24/7 para resolver cualquier consulta y garantizar tu satisfacción total.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Términos y Políticas Mejorada -->
+<div class="terms-section">
+    <div class="section-header">
+        <h2>Compromiso de Transparencia</h2>
+        <p>Políticas claras para una experiencia confiable y segura</p>
+    </div>
+    
+    <div class="terms-grid">
+        <div class="terms-card">
+            <h3><i class="fas fa-file-contract"></i> Términos de Servicio</h3>
+            <ul class="terms-list">
+                <li><strong>Edad mínima:</strong> Debes tener al menos 13 años para realizar compras en nuestra plataforma</li>
+                <li><strong>Cuentas válidas:</strong> Solo procesamos órdenes para cuentas de juego legítimas y personales</li>
+                <li><strong>Uso personal:</strong> Todos los productos adquiridos son para uso exclusivo del comprador</li>
+                <li><strong>Verificación:</strong> Nos reservamos el derecho de verificar transacciones para prevenir fraudes</li>
+                <li><strong>Modificaciones:</strong> Los términos pueden actualizarse para mejorar la experiencia del usuario</li>
+                <li><strong>Jurisdicción:</strong> Todas las transacciones se rigen bajo las leyes de Guatemala</li>
+            </ul>
+        </div>
+        
+        <div class="terms-card">
+            <h3><i class="fas fa-sync-alt"></i> Política de Reembolsos</h3>
+            <ul class="terms-list">
+                <li><strong>Productos digitales:</strong> No aceptamos reembolsos una vez entregado el código o producto digital</li>
+                <li><strong>Errores en compra:</strong> Contacta nuestro soporte dentro de las primeras 2 horas para asistencia</li>
+                <li><strong>Problemas técnicos:</strong> Garantizamos la solución de cualquier issue dentro de 24 horas</li>
+                <li><strong>No entregado:</strong> Reembolso completo si no entregamos tu producto dentro de 6 horas</li>
+                <li><strong>Método de pago:</strong> Los reembolsos se realizan exclusivamente por el mismo método de pago original</li>
+                <li><strong>Procesamiento:</strong> Los reembolsos toman entre 3-5 días hábiles en procesarse completamente</li>
+            </ul>
+        </div>
+        
+        <div class="terms-card">
+            <h3><i class="fas fa-shield-alt"></i> Política de Privacidad</h3>
+            <ul class="terms-list">
+                <li><strong>Datos protegidos:</strong> Nunca compartimos información personal con terceros no autorizados</li>
+                <li><strong>Transacciones seguras:</strong> Utilizamos encriptación SSL de 256-bit para todas las transacciones</li>
+                <li><strong>Información mínima:</strong> Solo recolectamos datos estrictamente necesarios para el servicio</li>
+                <li><strong>Comunicaciones:</strong> Solo contactamos para confirmaciones de compra y soporte al cliente</li>
+                <li><strong>Cookies:</strong> Empleamos cookies esenciales únicamente para funcionalidad del sitio web</li>
+                <li><strong>Derechos del usuario:</strong> Puedes solicitar la eliminación de tus datos en cualquier momento</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+<!-- Botón flotante de WhatsApp -->
+<a href="https://wa.me/50240512960" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Carrito premium -->
+<button id="cartToggle" onclick="toggleCart()">
+    <i class="fas fa-shopping-cart"></i> Carrito <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<div id="cart">
+    <h3>Tu Carrito <span id="cartItemCount">0</span></h3>
+    
+    <div id="cartItems">
+        <!-- Los productos se agregarán aquí dinámicamente -->
+    </div>
+    
+    <div id="cartTotalSection" style="display:none;">
+        <div class="cart-total">
+            Total: Q<span id="cartTotal">0.00</span>
+        </div>
+        
+        <div class="cart-actions">
+            <button class="btn btn-danger" onclick="clearCart()"><i class="fas fa-trash"></i> Vaciar Carrito</button>
+            <button class="btn btn-premium" onclick="checkout()"><i class="fas fa-lock"></i> Finalizar Compra</button>
+        </div>
+        
+        <div class="payment-instructions">
+            <h4><i class="fas fa-university"></i> Instrucciones de Pago</h4>
+            <p class="small">Después de finalizar la compra, realiza un depósito en Banrural a la cuenta:</p>
+            <ul class="small" style="padding-left:16px; margin: 10px 0;">
+                <li><strong>Banco:</strong> Banrural</li>
+                <li><strong>Cuenta:</strong> 03102400100616</li>
+            </ul>
+            <p class="small" style="color:#f87171"><i class="fas fa-exclamation-circle"></i> Recuerda: debes hacer el depósito antes de que se confirme la compra.</p>
+        </div>
+    </div>
+    
+    <div id="cartEmpty" class="cart-empty">
+        <i class="fas fa-shopping-cart"></i>
+        <p>Tu carrito está vacío</p>
+        <p class="small">Selecciona productos para agregarlos al carrito</p>
+    </div>
+</div>
+
+<script>
+/* PRECIOS EN QUETZALES CON DESCUENTOS */
+const prices = {
+    fortnite:{
+        title:"Fortnite — V-Bucks",
+        items:[
+            {name:"1,000 V-Bucks",originalPrice:89.00,price:73.00,discount:18},
+            {name:"2,800 V-Bucks",originalPrice:225.00,price:186.00,discount:17},
+            {name:"5,000 V-Bucks",price:289.00},
+            {name:"13,500 V-Bucks",price:696.00}
+        ]
+    },
+    freefire:{
+        title:"Free Fire — Diamantes",
+        items:[
+            {name:"100 Diamantes",originalPrice:14.00,price:11.00,discount:21},
+            {name:"310 Diamantes",originalPrice:35.00,price:28.00,discount:20},
+            {name:"520 Diamantes",originalPrice:55.00,price:44.00,discount:20},
+            {name:"1,060 Diamantes",originalPrice:138.00,price:110.00,discount:20},
+            {name:"1,080 Diamantes",originalPrice:144.00,price:115.00,discount:20},
+            {name:"2,180 Diamantes",originalPrice:201.00,price:161.00,discount:20},
+            {name:"5,600 Diamantes",originalPrice:491.00,price:393.00,discount:20}
+        ]
+    },
+    codm:{
+        title:"Call of Duty Mobile — CP",
+        items:[
+            {name:"88 CP",originalPrice:12.00,price:9.00,discount:25},
+            {name:"160 CP",originalPrice:17.00,price:13.00,discount:24},
+            {name:"460 CP",originalPrice:45.00,price:34.00,discount:24},
+            {name:"960 CP",originalPrice:88.00,price:67.00,discount:24},
+            {name:"2600 CP",originalPrice:217.00,price:165.00,discount:24},
+            {name:"5400 CP",originalPrice:428.00,price:325.00,discount:24},
+            {name:"11600 CP",originalPrice:1053.00,price:800.00,discount:24},
+            {name:"23200 CP",originalPrice:2112.00,price:1605.00,discount:24},
+            {name:"34800 CP",originalPrice:3168.00,price:2405.00,discount:24},
+            {name:"58000 CP",originalPrice:5280.00,price:4010.00,discount:24}
+        ]
+    },
+    pubg:{
+        title:"PUBG Mobile — UC",
+        items:[
+            {name:"60 UC",originalPrice:13.00,price:10.00,discount:23},
+            {name:"325 UC",originalPrice:56.00,price:43.00,discount:23},
+            {name:"660 UC",originalPrice:105.00,price:81.00,discount:23},
+            {name:"1,800 UC",originalPrice:258.00,price:199.00,discount:23},
+            {name:"3,850 UC",originalPrice:519.00,price:400.00,discount:23},
+            {name:"8,100 UC",originalPrice:1039.00,price:800.00,discount:23}
+        ]
+    },
+    roblox:{
+        title:"Roblox — Robux",
+        items:[
+            {name:"400 Robux",originalPrice:45.00,price:35.00,discount:22},
+            {name:"800 Robux",originalPrice:83.00,price:65.00,discount:22},
+            {name:"1,700 Robux",originalPrice:160.00,price:125.00,discount:22},
+            {name:"4,500 Robux",originalPrice:385.00,price:300.00,discount:22}
+        ]
+    },
+    mobilelegends:{
+        title:"Mobile Legends — Diamonds",
+        items:[
+            {name:"86 Diamonds",originalPrice:23.00,price:18.00,discount:22},
+            {name:"172 Diamonds",originalPrice:45.00,price:35.00,discount:22},
+            {name:"429 Diamonds",originalPrice:109.00,price:85.00,discount:22},
+            {name:"875 Diamonds",originalPrice:212.00,price:165.00,discount:22}
+        ]
+    },
+    genshin:{
+        title:"Genshin Impact — Crystals",
+        items:[
+            {name:"60 Crystals",originalPrice:19.00,price:15.00,discount:21},
+            {name:"300 Crystals",originalPrice:82.00,price:65.00,discount:21},
+            {name:"980 Crystals",originalPrice:247.00,price:195.00,discount:21},
+            {name:"1980 Crystals",originalPrice:494.00,price:390.00,discount:21}
+        ]
+    },
+    brawl:{
+        title:"Brawl Stars — Gems",
+        items:[
+            {name:"30 Gems",originalPrice:32.00,price:25.00,discount:22},
+            {name:"80 Gems",originalPrice:77.00,price:60.00,discount:22},
+            {name:"170 Gems",originalPrice:147.00,price:115.00,discount:22},
+            {name:"360 Gems",originalPrice:295.00,price:230.00,discount:22}
+        ]
+    },
+    stumble:{
+        title:"Stumble Guys — Gems",
+        items:[
+            {name:"100 Gems",originalPrice:26.00,price:20.00,discount:23},
+            {name:"280 Gems",originalPrice:65.00,price:50.00,discount:23},
+            {name:"600 Gems",originalPrice:130.00,price:100.00,discount:23},
+            {name:"1500 Gems",originalPrice:299.00,price:230.00,discount:23}
+        ]
+    },
+    fifa:{
+        title:"FIFA — Ofertas Especiales",
+        items:[
+            {name:"Consulta por descuentos especiales",price:0.00}
+        ]
+    }
+};
+
+/***************
+  CARRITO PREMIUM
+***************/
+let cart = [];
+
+// Funcionalidad de búsqueda y filtros
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('gameSearch');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const gameItems = document.querySelectorAll('.game-item');
+    
+    // Búsqueda en tiempo real
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        gameItems.forEach(item => {
+            const gameName = item.querySelector('h3').textContent.toLowerCase();
+            const gameDescription = item.querySelector('.game-description').textContent.toLowerCase();
+            
+            if (gameName.includes(searchTerm) || gameDescription.includes(searchTerm)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // Filtros por categoría
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Actualizar pestaña activa
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filtrar juegos
+            gameItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                
+                if (filter === 'all' || category.includes(filter)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+
+function openPrices(key){
+    const data = prices[key];
+    if(!data) return;
+
+    document.getElementById("selectedGameTitle").textContent = data.title;
+
+    const list = document.getElementById("priceList");
+    list.innerHTML = "";
+
+    data.items.forEach((it)=>{
+        const row = document.createElement("div");
+        row.className = "price-row";
+        
+        let priceHTML = '';
+        if (it.originalPrice) {
+            priceHTML = `
+                <div style="display:flex;flex-direction:column;align-items:flex-end;">
+                    <span class="original-price">Q${it.originalPrice.toFixed(2)}</span>
+                    <div class="price">Q${it.price.toFixed(2)} <span class="discount-badge">-${it.discount}%</span></div>
+                </div>
+            `;
+        } else {
+            priceHTML = `<div class="price">${it.price > 0 ? 'Q' + it.price.toFixed(2) : 'Consultar'}</div>`;
+        }
+        
+        row.innerHTML =
+            `<div class="label">${it.name}</div>
+             <div style="display:flex;gap:8px;align-items:center">
+                ${priceHTML}
+                ${it.price > 0 ? '<button class="btn btn-premium"><i class="fas fa-cart-plus"></i> Agregar</button>' : '<button class="btn" onclick="showNotification(\'Por favor contáctanos para información sobre descuentos\')"><i class="fas fa-info-circle"></i> Consultar</button>'}
+             </div>`;
+        list.appendChild(row);
+    });
+
+    // Ocultar secciones adicionales y mostrar solo precios
+    document.getElementById("gameGrid").style.display = "none";
+    document.getElementById("additionalSections").style.display = "none";
+    document.getElementById("priceSection").style.display = "block";
+}
+
+function closePrices(){
+    document.getElementById("priceSection").style.display = "none";
+    document.getElementById("gameGrid").style.display = "grid";
+    document.getElementById("additionalSections").style.display = "block";
+}
+
+function addToCart(price, name){
+    cart.push({name, price, id: Date.now() + Math.random()});
+    updateCartUI();
+    // Mostrar notificación
+    showNotification(`${name} agregado al carrito`);
+}
+
+function removeFromCart(id){
+    cart = cart.filter(item => item.id !== id);
+    updateCartUI();
+    showNotification("Producto eliminado del carrito");
+}
+
+function updateCartUI(){
+    const cartItems = document.getElementById("cartItems");
+    const cartEmpty = document.getElementById("cartEmpty");
+    const cartTotalSection = document.getElementById("cartTotalSection");
+    const cartCount = document.getElementById("cartCount");
+    const cartItemCount = document.getElementById("cartItemCount");
+    
+    // Actualizar contadores
+    cartCount.textContent = cart.length;
+    cartItemCount.textContent = cart.length;
+    
+    // Mostrar/ocultar secciones según si hay productos
+    if (cart.length === 0) {
+        cartEmpty.style.display = "block";
+        cartTotalSection.style.display = "none";
+        cartItems.innerHTML = "";
+    } else {
+        cartEmpty.style.display = "none";
+        cartTotalSection.style.display = "block";
+        
+        // Calcular total y mostrar productos
+        let total = 0;
+        cartItems.innerHTML = "";
+        
+        cart.forEach(item => {
+            total += item.price;
+            
+            const cartItem = document.createElement("div");
+            cartItem.className = "cart-item";
+            cartItem.innerHTML = `
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">Q${item.price.toFixed(2)}</div>
+                </div>
+                <button class="cart-item-remove" onclick="removeFromCart(${item.id})"><i class="fas fa-times"></i></button>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+        
+        document.getElementById("cartTotal").textContent = total.toFixed(2);
+    }
+}
+
+function toggleCart(){
+    const cart = document.getElementById("cart");
+    if (cart.style.display === "block") {
+        cart.style.display = "none";
+    } else {
+        cart.style.display = "block";
+    }
+}
+
+function clearCart(){
+    if (cart.length === 0) return;
+    
+    if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+        cart = [];
+        updateCartUI();
+        showNotification("Carrito vaciado");
+    }
+}
+
+function checkout(){
+    if(cart.length === 0){
+        showNotification("Tu carrito está vacío. Agrega productos antes de finalizar la compra.");
+        return;
+    }
+    
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const productList = cart.map(item => `• ${item.name} - Q${item.price.toFixed(2)}`).join('\n');
+    
+    const message = `¡Hola! Quiero realizar la siguiente compra:\n\n${productList}\n\nTotal: Q${total.toFixed(2)}\n\nPor favor, confirmen disponibilidad y envíenme las instrucciones para el pago.`;
+    const encodedMessage = encodeURIComponent(message);
+    
+    // Cerrar carrito
+    document.getElementById("cart").style.display = "none";
+    
+    // Mostrar confirmación
+    if (confirm(`Total a pagar: Q${total.toFixed(2)}\n\nSe abrirá WhatsApp para que envíes tu pedido. ¿Continuar?`)) {
+        window.open(`https://wa.me/50240512960?text=${encodedMessage}`, '_blank');
+        
+        // Limpiar carrito después del checkout
+        cart = [];
+        updateCartUI();
+    }
+}
+
+function showNotification(message) {
+    // Remover notificaciones existentes
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Crear notificación
+    const notification = document.createElement("div");
+    notification.className = "notification";
+    notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+    
+    document.body.appendChild(notification);
+    
+    // Remover después de 3 segundos
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+// Cerrar carrito al hacer clic fuera de él
+document.addEventListener("click", function(e) {
+    const cart = document.getElementById("cart");
+    const cartToggle = document.getElementById("cartToggle");
+    
+    if (cart.style.display === "block" && 
+        !cart.contains(e.target) && 
+        !cartToggle.contains(e.target)) {
+        cart.style.display = "none";
+    }
+});
+
+// Agregar productos al carrito
+document.addEventListener("click", function(e){
+    if(e.target.closest("#priceList .btn") && e.target.closest("#priceList .btn").textContent.includes("Agregar")){
+        const row = e.target.closest(".price-row");
+        const label = row.querySelector(".label").textContent;
+        const priceText = row.querySelector(".price").textContent;
+        
+        // Solo agregar si tiene precio (no es "Consultar")
+        if (priceText !== "Consultar") {
+            const price = Number(priceText.replace("Q","").split(" ")[0]);
+            addToCart(price, label);
+        }
+    }
+});
+
+// Inicializar carrito
+updateCartUI();
+</script>
+
+</body>
+</html>
